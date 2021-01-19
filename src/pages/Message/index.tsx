@@ -55,27 +55,20 @@ const Message: React.FC = () => {
   const baloesPosition = useSharedValue(500);
   const baloes2Position = useSharedValue(500);
 
-  const playMusic = useCallback(() => {
-    try {
-      TrackPlayer.setupPlayer().then(async () => {
-        console.log('Player Ready');
-        TrackPlayer.updateOptions({
-          stopWithApp: true,
-        });
+  const songs = {
+    id: 'track1',
+    url: require('../../data/ser-humano-ou-anjo.mp3'),
+    title: 'Track title1',
+    artist: 'Track',
+  };
 
-        await TrackPlayer.add({
-          id: 'track1',
-          url: require('../../data/ser-humano-ou-anjo.mp3'),
-          title: 'Track title1',
-          artist: 'Track',
-        });
-        TrackPlayer.play();
-        console.log('audio tocando...');
-      });
-    } catch (err) {
-      console.log('Não executavel');
-    }
-  }, []);
+  const playMusic = useCallback(async () => {
+    await TrackPlayer.setupPlayer();
+    TrackPlayer.updateOptions({stopWithApp: true});
+    await TrackPlayer.add(songs);
+    await TrackPlayer.play();
+    console.log('audio tocando...');
+  }, [songs]);
 
   useEffect(() => {
     playMusic();
